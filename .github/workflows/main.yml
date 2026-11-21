@@ -36,13 +36,13 @@ jobs:
           Write-Host "Actual   SHA256: $actualHash"
 
           # Check magic bytes (valid ZIP starts with 'PK' -> 0x50 0x4B)
-          $bytes = Get-Content -Path $outFile -Encoding Byte -TotalCount 4
+          $bytes = Get-Content -Path $outFile -AsByteStream -TotalCount 4
           $magic = ($bytes | ForEach-Object { $_.ToString("X2") }) -join " "
           Write-Host "First 4 bytes (Hex): $magic"
 
           if ($magic -notmatch "^50 4B") {
-            Write-Warning "File is NOT a valid ZIP archive! Previewing first 20 lines:"
-            Get-Content -Path $outFile -TotalCount 20
+            Write-Warning "File is NOT a valid ZIP archive! Raw content preview:"
+            Get-Content -Path $outFile -Raw
             exit 1
           }
 
